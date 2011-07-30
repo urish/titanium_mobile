@@ -172,8 +172,10 @@ def clean_type(the_type):
 		type_out = ','.join( [ clean_type(s) for s in type_out.split(',') if len(s) ] )
 	if '.' in type_out:
 		type_out = '.'.join( [ clean_type(s) for s in type_out.split('.') if len(s) ] )
-	if type_out.lower() in ['int','integer','float','double','long']:
-		type_out = 'Number'
+	if type_out.lower() in ['int','integer']:
+		type_out = 'int'
+	if type_out.lower() in ['float','double','long']:
+		type_out = type_out.lower()
 	if type_out.lower() == 'bool':
 		type_out = 'Boolean'
 	if type_out.lower() == 'domnode': # special case

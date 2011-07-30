@@ -127,137 +127,98 @@ def wl(f, line):
 	f.write(line + "\n")
 
 def convert_basic_info(t, f):
-	module = is_module(t)
-	extends = 'Titanium.Proxy'
-	if module:
-		extends = 'Titanium.Module'
-	elif t['name'].startswith('Titanium.UI') and t['name'] != "Titanium.UI.View":
-		extends = 'Titanium.UI.View'
-	wl(f, '---')
-	wl(f, 'name: %s' % t['name'])
-	desc = prepare_free_text(t['description'].strip())
-	wl(f, 'description: %s' % prepare_free_text(t['description'].strip()))
-	wl(f, 'extends: %s' % extends)
-	since = '"0.8"'
-	if 'since' in t:
-		since = '"' + t['since'][0]['version'] + '"'
-	wl(f, 'since: %s' % since)
+	pass
 
 # t=type, p=method param, f=file
-def convert_parameter(t, p, f):
-	wl(f, "%s  - name: %s" % (indent, p['name']))
-	ind = "%s%s" % (indent,indent)
-	if 'description' in p:
-		wl(f, "%sdescription: %s" % (ind, prepare_free_text(p['description'].strip(), 2)))
-	if 'type' in p:
-		wl(f, "%stype: %s" % (ind, clean_type(p['type'])))
+def convert_parameter(t, m, p, f):
+	if 'type' in p and p['type'] in ['int', 'float','double','long']:
+		return "\t\t\"methods[name='%s'] properties[name='%s'] type\": \"%s\",\n" % (m['name'], p['name'], p['type'])
+	return ""
 
 # t=type, m=method, f=file
 def convert_parameters(t, m, f):
 	if not 'parameters' in m:
-		return
-	wl(f, "%sparameters:" % indent)
+		return ""
+	result = ""
 	for p in m['parameters']:
-		convert_parameter(t, p, f)
+		result += convert_parameter(t, m, p, f)
+	return result
 
 # t=type, m=method, f=file
 def convert_method(t, m, f):
-	line = '  - name: %s' % m['name']
-	wl(f, line)
-	wl(f, "%sdescription: %s" % (indent, prepare_free_text(m['description'].strip(), 1)))
-	if 'returnTypes' in m:
-		returns = m['returnTypes'][0]
-		wl(f, "%sreturns:\n%s%stype: %s" % (indent, indent, indent, clean_type(returns['type'])))
-	convert_parameters(t, m, f)
+	return convert_parameters(t, m, f)
 
 def convert_methods(t, f):
 	if not 'functions' in t or len(t['functions']) == 0:
-		return
-	wrote_header = False
+		return ""
+	result = ""
 	for func in t['functions']:
 		if skip_method(func, t):
 			continue
-		if not wrote_header:
-			wrote_header = True
-			wl(f, 'methods:')
-		convert_method(t, func, f)
+		result += convert_method(t, func, f)
+	return result
 
 # t=type, e=event, p=event property, f=file
 def convert_event_property(t, e, p, f):
-	wl(f, '%s  - name: %s' % (indent, p['name']))
-	ind = '%s%s' % (indent, indent)
-	if 'description' in p:
-		wl(f, '%sdescription: %s' % (ind, prepare_free_text(p['description'].strip(), 3)))
-	if 'type' in p:
-		wl(f, '%stype: %s' % (ind, clean_type(p['type'])))
+	if 'type' in p and p['type'] in ['int', 'float','double','long']:
+		return "EVENT!!! \n" % p['name']
+	return ""
 
 # t=type, e=event, f=file
 def convert_event_properties(t, e, f):
 	if not 'properties' in e or len(e['properties']) == 0:
-		return
-	wl(f, "%sproperties:" % (indent))
+		return ""
+	result = ""
 	for p in e['properties']:
-		convert_event_property(t, e, p, f)
+		result += convert_event_property(t, e, p, f)
+	return result
 
 # t=type, e=event, f=file
 def convert_event(t, e, f):
-	wl(f, '  - name: %s' % e['name'])
-	if 'description' in e:
-		wl(f, '%sdescription: %s' % (indent, prepare_free_text(e['description'].strip(), 1)))
+	result = ""
 	if 'properties' in e:
-		convert_event_properties(t, e, f)
+		result += convert_event_properties(t, e, f)
+	return result
 
 def convert_events(t, f):
 	if not 'events' in t or len(t['events']) == 0:
-		return
-	wl(f, 'events:')
+		return ""
+	result = ""
 	for event in t['events']:
-		convert_event(t, event, f)
+		result += convert_event(t, event, f)
+	return result
 
 # t=type, p=property, f=file
 def convert_property(t, p, f):
-	line = '  - name: %s' % p['name']
-	wl(f, line)
-	wl(f, "%sdescription: %s" % (indent, prepare_free_text(p['description'].strip(), 1)))
-	if 'type' in p:
-		wl(f, "%stype: %s" % (indent, clean_type(p['type'])))
+	if 'type' in p and p['type'] in ['int', 'float','double', 'long']:
+		return "\t\t\"properties[name='%s'] type\": \"%s\",\n" % (p['name'], p['type'])
+	return ""
 
 def convert_properties(t, f):
 	if not 'properties' in t or len(t['properties']) == 0:
-		return
-	wrote_header = False
+		return ""
+	result = ""
 	for p in t['properties']:
 		if skip_property(p, t):
 			continue
-		if not wrote_header:
-			wrote_header = True
-			wl(f, 'properties:')
-		convert_property(t, p, f)
-
+		result += convert_property(t, p, f)
+	return result
 
 def convert_type(t):
-	output_path = build_output_path(t)
-	f = open(output_path, 'w')
-	try:
-		info('Writing out %s' % output_path)
-		convert_basic_info(t, f)
-		convert_methods(t, f)
-		convert_events(t, f)
-		convert_properties(t, f)
-		if 'remarks' in t and len(t['remarks'])>0:
-			wl(f, 'notes: %s' % prepare_free_text(t['remarks'][0].strip()))
-		if 'examples' in t and len(t['examples'])>0:
-			examples = ''
-			for example in t['examples']:
-				examples += example['name'] + '\n\n' + example['code']
-			wl(f, 'examples: %s' % prepare_free_text(examples))
-
-	finally:
-		f.close()
+	f = None
+	buffer = convert_methods(t, f)
+	buffer += convert_events(t, f)
+	buffer += convert_properties(t, f)
+	if buffer != "":
+		print "\t\"%s\": {" % t['name']
+		print buffer[:-2]
+		print "\t},"
 
 def convert_types():
+	print "{"
 	for t in types:
 		convert_type(t)
+	print "}"
 
 def main(args):
 	docgen.suppress_htmlerize = True
