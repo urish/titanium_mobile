@@ -146,7 +146,10 @@ def convert_parameters(t, m, f):
 
 # t=type, m=method, f=file
 def convert_method(t, m, f):
-	return convert_parameters(t, m, f)
+	result = ""
+	if 'returnTypes' in m and m['returnTypes'][0]['type'] in ['int', 'float','double', 'long']:
+		result += "\t\t\"methods[name='%s'] returns type\": \"%s\",\n" % (m['name'], m['returnTypes'][0]['type'])
+	return result + convert_parameters(t, m, f)
 
 def convert_methods(t, f):
 	if not 'functions' in t or len(t['functions']) == 0:
