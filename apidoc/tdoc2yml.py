@@ -132,7 +132,7 @@ def convert_basic_info(t, f):
 # t=type, p=method param, f=file
 def convert_parameter(t, m, p, f):
 	if 'type' in p and p['type'] in ['int', 'float','double','long']:
-		return "\t\t\"methods[name='%s'] properties[name='%s'] type\": \"%s\",\n" % (m['name'], p['name'], p['type'])
+		return "\t\t\"methods[name='%s'] parameters[name='%s'] type\": \"%s\",\n" % (m['name'], p['name'], p['type'])
 	return ""
 
 # t=type, m=method, f=file
