@@ -16,6 +16,7 @@ events:
     properties:
       - name: value
         description: the value of the field upon blur
+        type: String
       - name: source
         description: the source object that fired the event
       - name: y
@@ -31,6 +32,7 @@ events:
     properties:
       - name: value
         description: the value of the field upon change
+        type: String
       - name: source
         description: the source object that fired the event
       - name: y
@@ -46,6 +48,7 @@ events:
     properties:
       - name: value
         description: the value of the field upon focus
+        type: String
       - name: source
         description: the source object that fired the event
       - name: y

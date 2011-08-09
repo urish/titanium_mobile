@@ -76,6 +76,7 @@ events:
         description: the name of the event fired
       - name: intent
         description: the <Titanium.Android.Intent> passed to the native `onNewIntent` method.
+        type: Titanium.Android.Intent
   - name: pause
     description: Fired from the Activity's [onPause](http://developer.android.com/reference/android/app/Activity.html#onPause())
     properties:
