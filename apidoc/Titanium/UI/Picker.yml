@@ -42,20 +42,26 @@ events:
     properties:
       - name: columnIndex
         description: the selected column index
+        type: Number
       - name: rowIndex
         description: the selected row index
+        type: Number
       - name: column
         description: the column object
+        type: Titanium.UI.PickerColumn
       - name: value
         description: (date/time pickers only) the selected date/time value.
+        type: Date
       - name: source
         description: the source object that fired the event
       - name: row
         description: the row object
+        type: Titanium.UI.PickerRow
       - name: type
         description: the name of the event fired
       - name: selectedValue
         description: (plain picker only) the array of selected values, one element per column in the picker.
+        type: Array<Object>
 properties:
   - name: columns
     description: array of column values

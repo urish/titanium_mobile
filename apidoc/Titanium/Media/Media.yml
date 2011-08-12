@@ -89,6 +89,7 @@ events:
     properties:
       - name: available
         description: bool indicating availability of recording device
+        type: Boolean
       - name: source
         description: the source object that fired the event
       - name: type
@@ -98,6 +99,7 @@ events:
     properties:
       - name: volume
         description: float of the new volume in dB
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: type

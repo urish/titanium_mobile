@@ -14,12 +14,14 @@ events:
     properties:
       - name: cancel
         description: boolean to indicate if the cancel button was pressed
+        type: Boolean
       - name: source
         description: the source object that fired the event
       - name: type
         description: the name of the event fired
       - name: index
         description: the button index that was pressed
+        type: Number
 properties:
   - name: buttonNames
     description: array of button names as strings

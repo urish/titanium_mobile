@@ -32,6 +32,7 @@ events:
         description: the x point of the event in receiving view coordiantes
       - name: message
         description: the error message
+        type: String
       - name: type
         description: the name of the event fired
       - name: globalPoint

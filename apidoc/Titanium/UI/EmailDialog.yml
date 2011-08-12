@@ -31,10 +31,13 @@ events:
       - name: result
         description: |
                 result status either as SENT, SAVED, CANCELLED or FAILED. (Note: Android result will be SENT even if user discards or saves the message.  SAVED and CANCELLED are not supported on Android.)
+        type: Number
       - name: success
         description: boolean to indicate if the email was successfully sent
+        type: Boolean
       - name: error
         description: string message of the error or null if successfully sent
+        type: String
 properties:
   - name: CANCELLED
     description: constant for the CANCELLED status result

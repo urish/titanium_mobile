@@ -34,10 +34,12 @@ events:
         description: the source object that fired the event
       - name: state
         description: the new battery state
+        type: Number
       - name: type
         description: the name of the event fired
       - name: level
         description: the new battery level
+        type: Number
 properties:
   - name: BATTERY_STATE_CHARGING
     description: the device is plugged in and currently being charged

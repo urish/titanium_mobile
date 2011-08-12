@@ -20,6 +20,7 @@ events:
     properties:
       - name: scale
         description: the new scale as a float
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: y
@@ -41,12 +42,14 @@ events:
         description: the x point of the event in receiving view coordiantes
       - name: dragging
         description: boolean to indicate if the scroll is based on a dragging gesture
+        type: Boolean
       - name: type
         description: the name of the event fired
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
       - name: decelerating
         description: boolean to indicate if the scroll is decelerating
+        type: Boolean
 properties:
   - name: canCancelEvents
     description: (iPhone only) boolean to indicate if the scroll view can cancel subview touches in order to scroll instead. Default of true

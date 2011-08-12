@@ -9,6 +9,7 @@ events:
     properties:
       - name: value
         description: the new value of the switch
+        type: Boolean
       - name: source
         description: the source object that fired the event
       - name: y

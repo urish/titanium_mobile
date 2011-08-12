@@ -28,6 +28,7 @@ events:
     properties:
       - name: item
         description: the <Titanium.UI.DashboardItem> that was deleted
+        type: Titanium.UI.DashboardItem
       - name: source
         description: the source object that fired the event
       - name: y
@@ -56,8 +57,10 @@ events:
     properties:
       - name: item
         description: the <Titanium.UI.DashboardItem> that was moved
+        type: Titanium.UI.DashboardItem
       - name: items
         description: the pending data array in the new order (uncommitted)
+        type: Array<Titanium.UI.DashboardItem>
       - name: source
         description: the source object that fired the event
       - name: y

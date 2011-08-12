@@ -9,6 +9,9 @@ events:
     properties:
       - name: value
         description: the new value of the slider
+      - name: dragging
+        description: boolean to indicate if the scroll is based on a dragging gesture
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: thumbSize

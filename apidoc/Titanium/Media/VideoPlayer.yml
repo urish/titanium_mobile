@@ -94,6 +94,7 @@ events:
         description: the source object that fired the event
       - name: reason
         description: the completion reason. One of <Titanium.Media.VIDEO_FINISH_REASON_PLAYBACK_ENDED>, <Titanium.Media.VIDEO_FINISH_REASON_PLAYBACK_ERROR> or <Titanium.Media.VIDEO_FINISH_REASON_USER_EXITED>.
+        type: Number
       - name: y
         description: the y point of the event, in receiving view coordinates
       - name: x
@@ -137,6 +138,7 @@ events:
         description: the source object that fired the event
       - name: duration
         description: duration
+        type: Number
       - name: x
         description: the x point of the event in receiving view coordiantes
       - name: type
@@ -154,6 +156,7 @@ events:
         description: the x point of the event in receiving view coordiantes
       - name: message
         description: reason for error as string
+        type: String
       - name: type
         description: the name of the event fired
       - name: globalPoint
@@ -165,6 +168,7 @@ events:
         description: the source object that fired the event
       - name: entering
         description: true to indicate entering fullscreen, false to indicate leaving fullscreen
+        type: Boolean
       - name: y
         description: the y point of the event, in receiving view coordinates
       - name: x
@@ -191,6 +195,7 @@ events:
     properties:
       - name: loadState
         description: loadState
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: y
@@ -208,6 +213,7 @@ events:
         description: the source object that fired the event
       - name: mediaTypes
         description: media types
+        type: Number
       - name: y
         description: the y point of the event, in receiving view coordinates
       - name: x
@@ -242,6 +248,7 @@ events:
         description: the x point of the event in receiving view coordiantes
       - name: playbackState
         description: playbackState
+        type: Number
       - name: type
         description: the name of the event fired
       - name: globalPoint
@@ -251,6 +258,7 @@ events:
     properties:
       - name: url
         description: url of the media
+        type: String
       - name: source
         description: the source object that fired the event
       - name: y
@@ -303,8 +311,9 @@ events:
   - name: sourceChange
     description: fired when the movieSourceType is <Titanium.Media.VIDEO_SOURCE_TYPE_UNKNOWN> when preparing for playback.
     properties:
-      - name: sourceChange
+      - name: sourceType
         description: the new sourceType
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: y
@@ -320,6 +329,7 @@ events:
     properties:
       - name: direction
         description: direction of the swipe - either left or right
+        type: String
       - name: source
         description: the source object that fired the event
       - name: y
@@ -335,14 +345,18 @@ events:
     properties:
       - name: success
         description: boolean to indicate success or failure
+        type: Boolean
       - name: image
         description: blob of the thumbnail image
+        type: Titanium.Blob
       - name: time
         description: time
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: error
         description: if success is `false`, error message as string for reason
+        type: String
       - name: y
         description: the y point of the event, in receiving view coordinates
       - name: x

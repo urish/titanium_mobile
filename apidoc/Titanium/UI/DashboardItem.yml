@@ -16,6 +16,7 @@ events:
         description: the location object with the properties `x` and `y` of where in the parent view the click was
       - name: item
         description: the <Titanium.UI.DashboardItem> that was clicked
+        type: Titanium.UI.DashboardItem
   - name: delete
     description: fired when a  <Titanium.UI.DashboardItem> is deleted during editings
     properties:
@@ -25,6 +26,7 @@ events:
         description: the name of the event fired
       - name: item
         description: the <Titanium.UI.DashboardItem> that was deleted
+        type: Titanium.UI.DashboardItem
   - name: move
     description: fired when a  <Titanium.UI.DashboardItem> is moved during editing
     properties:
@@ -32,10 +34,12 @@ events:
         description: the source object that fired the event
       - name: items
         description: the pending data array in the new order (uncommitted)
+        type: Array<Titanium.UI.DashboardItem>
       - name: type
         description: the name of the event fired
       - name: item
         description: the <Titanium.UI.DashboardItem> that was moved
+        type: Titanium.UI.DashboardItem
 properties:
   - name: badge
     description: the badge value or `0` to remove the badge

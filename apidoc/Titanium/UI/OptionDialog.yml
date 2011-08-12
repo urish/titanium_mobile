@@ -12,14 +12,18 @@ events:
     properties:
       - name: index
         description: the button index that was pressed
+        type: Number
       - name: button
         description: boolean to indicate that the index refers to a button on the dialog and not an item. (Android)
+        type: Boolean
       - name: source
         description: the source object that fired the event
       - name: cancel
         description: the index of the cancel button
+        type: Number
       - name: destructive
         description: the index of the destructive button
+        type: Number
       - name: type
         description: the name of the event fired
 properties:

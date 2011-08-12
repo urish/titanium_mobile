@@ -100,12 +100,16 @@ events:
     properties:
       - name: index
         description: table view row index
+        type: Number
       - name: section
         description: table view section object
+        type: Titanium.UI.TableViewSection
       - name: detail
         description: boolean to indicate if the right area was clicked
+        type: Boolean
       - name: searchMode
         description: boolean to indicate if the table is in search mode
+        type: Boolean
       - name: source
         description: the source object that fired the event
       - name: rowData
@@ -120,6 +124,7 @@ events:
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
       - name: row
         description: table view row object
+        type: Titanium.UI.TableViewRow
   - name: longclick
     description: fired when the device detects that a table view row has been clicked and held (i.e., pressed
         without lifting the finger or trackpad).
@@ -148,12 +153,16 @@ events:
     properties:
       - name: index
         description: table view row index
+        type: Number
       - name: section
         description: table view section object
+        type: Titanium.UI.TableViewSection
       - name: detail
         description: boolean to indicate if the right area was clicked
+        type: Boolean
       - name: searchMode
         description: boolean to indicate if the table is in search mode
+        type: Boolean
       - name: source
         description: the source object that fired the event
       - name: rowData
@@ -168,15 +177,18 @@ events:
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
       - name: row
         description: table view row object
+        type: Titanium.UI.TableViewRow
   - name: scroll
     description: fired when the table view is scrolled
     properties:
       - name: firstVisibleItem
         description: the row index of the topmost visible row in the view (Android only)
         platforms: [android]
+        type: Number
       - name: visibleItemCount
         description: the number of rows currently visible in the view (Android only)
         platforms: [android]
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: contentOffset
@@ -185,6 +197,7 @@ events:
       - name: totalItemCount
         description: the total number of rows in the view (Android only)
         platforms: [android]
+        type: Number
       - name: y
         description: the y point of the event, in receiving view coordinates
       - name: x

@@ -18,6 +18,7 @@ events:
     properties:
       - name: index
         description: the index of the image frame being displayed
+        type: Number
       - name: source
         description: the source object that fired the event
       - name: y
@@ -35,6 +36,7 @@ events:
         description: the source object that fired the event
       - name: state
         description: either `url` to indicate the url property is loaded or `images` when all the images are loaded
+        type: String
       - name: y
         description: the y point of the event, in receiving view coordinates
       - name: x
