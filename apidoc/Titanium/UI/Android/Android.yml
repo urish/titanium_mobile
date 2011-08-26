@@ -70,6 +70,6 @@ properties:
   - name: WEBVIEW_PLUGINS_ON
     description: Enable plugins in <Titanium.UI.WebView>.
     type: Number
-  - name: WEBVIEW_PLUGINS_OFF
+  - name: PLUGIN_STATE_ON_DEMAND
     description: Display a placeholder and only load plugins when user selects placeholder.
     type: Number
