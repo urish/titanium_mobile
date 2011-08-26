@@ -415,7 +415,7 @@ properties:
     type: Number
   - name: appMusicPlayer
     description: an instance of <Titanium.Media.MusicPlayer> representing the app-specific music player.  iPhone/iPad only
-    type: Object
+    type: Titanium.Media.MusicPlayer
   - name: audioLineType
     description: returns the line type constant for the current line type
     type: Number

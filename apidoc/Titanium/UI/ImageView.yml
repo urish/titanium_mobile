@@ -102,7 +102,7 @@ properties:
     type: Boolean
   - name: image
     description: image to display either as string url, Blob or File
-    type: Object
+    type: [String, Titanium.Blob, Titanium.Filesystem.File]
   - name: images
     description: array of images (either as string url, Blob or File) to display in an animation
     type: Array<Object>
