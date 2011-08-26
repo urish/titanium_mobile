@@ -27,6 +27,9 @@ properties:
   - name: hasDetail
     description: render a system provided blue indicator icon in the right image area of the row cell
     type: Boolean
+  - name: header
+    description: If set, displays the given string above the cell as a group header
+    type: String
   - name: indentionLevel
     description: the indention level for the cell (defaults to 0)
     type: Number

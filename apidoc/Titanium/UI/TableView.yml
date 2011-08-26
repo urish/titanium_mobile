@@ -9,10 +9,11 @@ methods:
     parameters:
       - name: row
         description: row to append
-        type: Object
+        type: Titanium.UI.TableViewRow
       - name: properties
         description: animation properties
         type: Object
+        optional: true
   - name: deleteRow
     description: delete an existing row, optionally with animation
     parameters:
@@ -22,6 +23,7 @@ methods:
       - name: properties
         description: animation properties
         type: Object
+        optional: true
   - name: deselectRow
     description: programmatically deselect a row
     parameters:
@@ -36,10 +38,11 @@ methods:
         type: Number
       - name: row
         description: row to insert
-        type: Object
+        type: Titanium.UI.TableViewRow
       - name: properties
         description: animation properties
         type: Object
+        optional: true
   - name: insertRowBefore
     description: insert a row after another row, optionally with animation
     parameters:
@@ -48,10 +51,11 @@ methods:
         type: Number
       - name: row
         description: row to insert
-        type: Object
+        type: Titanium.UI.TableViewRow
       - name: properties
         description: animation properties
         type: Object
+        optional: true
   - name: scrollToIndex
     description: scroll to a specific row index and ensure that that row is on screen
     parameters:
@@ -61,6 +65,7 @@ methods:
       - name: properties
         description: animation properties. `position` property controls the position constant to use for position (on iPhone, use constants from Titanium.UI.iPhone.TableViewScrollPosition).
         type: Object
+        optional: true
   - name: scrollToTop
     description: scroll the table to a specific top position where 0 is the topmost y position in the table view
     parameters:
@@ -70,6 +75,7 @@ methods:
       - name: properties
         description: optional dictionary with the key `animated` (default, true) as boolean to indicate if the scroll should be animated or immediate
         type: Object
+        optional: true
   - name: selectRow
     description: programmatically select a row
     parameters:
@@ -85,15 +91,17 @@ methods:
       - name: properties
         description: animation properties
         type: Object
+        optional: true
   - name: updateRow
     description: update an existing row, optionally with animation
     parameters:
       - name: row
         description: row data to update
-        type: Object
+        type: Titanium.UI.TableViewRow
       - name: properties
         description: animation properties
         type: Object
+        optional: true
 events:
   - name: delete
     description: fired when a table row is delete by the user
