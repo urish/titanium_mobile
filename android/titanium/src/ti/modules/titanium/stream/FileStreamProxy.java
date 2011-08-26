@@ -1,16 +1,17 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2009-2010 by Appcelerator, Inc. All Rights Reserved.
+ * Copyright (c) 2009-2011 by Appcelerator, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  */
 
-package ti.modules.titanium.filesystem;
+package ti.modules.titanium.stream;
 
 import java.io.IOException;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.titanium.TiFileProxy;
 import org.appcelerator.titanium.io.TiStream;
 import org.appcelerator.titanium.util.Log;
 import org.appcelerator.titanium.util.TiConfig;
@@ -25,11 +26,11 @@ public class FileStreamProxy extends KrollProxy implements TiStream
 	private static final String LCAT = "FileStream";
 	private static final boolean DBG = TiConfig.LOGD;
 
-	private FileProxy fileProxy;
+	private TiFileProxy fileProxy;
 	private boolean isOpen = false;
 
 
-	public FileStreamProxy(FileProxy fileProxy)
+	public FileStreamProxy(TiFileProxy fileProxy)
 	{
 		super(fileProxy.getTiContext());
 		this.fileProxy = fileProxy;
@@ -87,7 +88,7 @@ public class FileStreamProxy extends KrollProxy implements TiStream
 		}
 
 		try {
-			return TiStreamHelper.read(fileProxy.tbf.getExistingInputStream(), bufferProxy, offset, length);
+			return TiStreamHelper.read(fileProxy.getBaseFile().getExistingInputStream(), bufferProxy, offset, length);
 
 		} catch (IOException e) {
 			Log.e(LCAT, "Unable to read from file, IO error", e);
@@ -144,7 +145,7 @@ public class FileStreamProxy extends KrollProxy implements TiStream
 		}
 
 		try {
-			return TiStreamHelper.write(fileProxy.tbf.getExistingOutputStream(), bufferProxy, offset, length);
+			return TiStreamHelper.write(fileProxy.getBaseFile().getExistingOutputStream(), bufferProxy, offset, length);
 
 		} catch (IOException e) {
 			Log.e(LCAT, "Unable to write to file, IO error", e);
@@ -155,19 +156,19 @@ public class FileStreamProxy extends KrollProxy implements TiStream
 	@Kroll.method
 	public boolean isWritable()
 	{
-		return (fileProxy.tbf.isOpen() && fileProxy.tbf.isWriteable());
+		return (fileProxy.getBaseFile().isOpen() && fileProxy.getBaseFile().isWriteable());
 	}
 
 	@Kroll.method
 	public boolean isReadable()
 	{
-		return fileProxy.tbf.isOpen();
+		return fileProxy.getBaseFile().isOpen();
 	}
 
 	@Kroll.method
 	public void close() throws IOException
 	{
-		fileProxy.tbf.close();
+		fileProxy.getBaseFile().close();
 		isOpen = false;
 	}
 }

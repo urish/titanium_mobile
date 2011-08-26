@@ -108,13 +108,9 @@ events:
       - name: networkTypeName
         description: the new network type as a string
         type: String
-      - name: source
-        description: the source object that fired the event
       - name: online
         description: boolean to indicate if the network is online
         type: Boolean
-      - name: type
-        description: the name of the event fired
       - name: networkType
         description: the new network type
         type: Number
