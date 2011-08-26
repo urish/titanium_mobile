@@ -20,6 +20,7 @@ methods:
       - name: properties
         description: object of animation properties. pass `animated` property (as boolean) to indicate if the dialog should be animated on open.
         type: Object
+        optional: true
 events:
   - name: complete
     description: fired when the email dialog has completed sending the email
