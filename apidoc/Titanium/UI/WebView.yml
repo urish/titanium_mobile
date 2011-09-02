@@ -46,6 +46,9 @@ events:
       - name: url
         description: the url of the web document
         type: String
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
   - name: error
     description: fired when the webview cannot load the content
     properties:
@@ -55,12 +58,18 @@ events:
       - name: message
         description: the error message
         type: String
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
   - name: load
     description: fired when the webview is loaded
     properties:
       - name: url
         description: the url of the web document
         type: String
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
   - name: pause
     description: Pause native webview plugins. Add a `pause` handler to your <Titanium.UI.Android.Activity> and invoke
         this method to pause native plugins. This is important with Flash content as it will continue in the background

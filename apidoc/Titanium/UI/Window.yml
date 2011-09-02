@@ -28,6 +28,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -39,6 +42,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -50,6 +56,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -61,6 +70,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -72,6 +84,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -83,6 +98,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -93,6 +111,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -103,6 +124,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -113,6 +137,9 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
         
@@ -123,11 +150,20 @@ events:
         description: the y point of the event, in receiving view coordinates
       - name: globalPoint
         description: a dictionary with properties x and y describing the point of the event in screen coordinates
+        platforms: [iphone, ipad]
+        deprecated:
+            since: "1.8.0"
       - name: x
         description: the x point of the event in receiving view coordiantes
 
 
 properties:
+  - name: activity
+    description: |
+      For heavyweight windows, this property contains a reference to the Android Activity object associated with this window.
+    platforms: [android]
+    type: Titanium.Android.Activity
+    
   - name: backButtonTitle
     description: title for the back button. only available in iPhone. this is only valid when the window is a child of a tab.
     platforms: [iphone, ipad]
@@ -257,7 +293,13 @@ properties:
         One of Ti.UI.Android.SOFT_INPUT_ADJUST_PAN, Ti.UI.Android.SOFT_INPUT_ADJUST_RESIZE, or Ti.UI.Android.SOFT_INPUT_ADJUST_UNSPECIFIED. Note: MUST be passed in the creation options. (Android Only) [Android Doc: Window.setSoftInputMode](http://developer.android.com/reference/android/view/Window.html#setSoftInputMode(int))
     platforms: [android]
     type: Number
-
+  - name: windowPixelFormat
+    description: |
+        Set the pixel format for the Activity's Window. The property is ignored on a Titanium "lightweight" Window. Use one of the <Ti.UI.Android>.PIXEL_FORMAT constants to set the format. 
+        See [Android SDK Window.setFormat](http://developer.android.com/reference/android/view/Window.html#setFormat(int))
+    platforms: [android]
+    type: Number
+    since: "1.8.0"
 
 notes: |
     ### Sub-contexts
