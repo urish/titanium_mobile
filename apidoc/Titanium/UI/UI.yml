@@ -379,7 +379,6 @@ properties:
   - name: backgroundColor
     description: this sets the background color of the master UIView (when there are no windows/tab groups on it)
     type: String
-    permission: read-only
   - name: backgroundImage
     description: path/url to an image file for setting a background for the master UIView (when there are no windows/tab groups on it).
     type: String
