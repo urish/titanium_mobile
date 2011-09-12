@@ -36,7 +36,7 @@ properties:
     type: Number
   - name: options
     description: array of button names as strings
-    type: Array<Object>
+    type: Array<String>
   - name: selectedIndex
     description: set an initially selected option. Only valid when options has been specified.
     platforms: [android]
