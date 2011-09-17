@@ -241,6 +241,9 @@ properties:
   - name: data
     description: the data array of objects to be used for the rows of the table view
     type: Array<Object>
+  - name: deleteButtonTitle
+    description: the text displayed on the red delete button when swiping a row in edit mode
+    type: String
   - name: editable
     description: allow the table view to be editable (this must be true for swipe-to-delete)
     platforms: [iphone, ipad]
