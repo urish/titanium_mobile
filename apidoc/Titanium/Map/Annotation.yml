@@ -10,12 +10,18 @@ properties:
   - name: image
     description: image for the pin instead of default image.
     type: String
+  - name: latitude
+    description: the latitude
+    type: Number
   - name: leftButton
     description: the left button image on the annotation. must either be a button type constant or url
     type: [Number,String]
   - name: leftView
     description: a left view that is displayed on the annotation
     type: Object
+  - name: longitude
+    description: the longitude
+    type: Number
   - name: pinImage
     description: Use <Titanium.Map.Annotation.image> property instead.
     deprecated:
