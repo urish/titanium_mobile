@@ -10,7 +10,7 @@ methods:
   - name: execute
     description: execute a SQL statement against the database and returns a ResultSet
     returns:
-        type: Object
+        type: Titanium.Database.ResultSet
     parameters:
       - name: sql
         description: the SQL to execute

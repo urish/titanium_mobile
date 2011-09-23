@@ -4,6 +4,18 @@ description: The top level Map module.  The Map module is used for creating in-a
 extends: Titanium.Module
 since: "0.8"
 properties:
+  - name: ANNOTATION_GREEN
+    description: Red pin color
+    type: Number
+    permission: read-only
+  - name: ANNOTATION_PURPLE
+    description: Red pin color
+    type: Number
+    permission: read-only
+  - name: ANNOTATION_RED
+    description: Red pin color
+    type: Number
+    permission: read-only
   - name: HYBRID_TYPE
     description: Displays a satellite image of the area with road and road name information layered on top.
     type: Number
