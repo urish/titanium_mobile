@@ -34,6 +34,7 @@ from css import csscompiler
 from module import ModuleDetector
 import localecompiler
 import fastdev
+import requireIndex
 
 ignoreFiles = ['.gitignore', '.cvsignore', '.DS_Store'];
 ignoreDirs = ['.git','.svn','_svn', 'CVS'];
@@ -52,7 +53,7 @@ uncompressed_types = [
 ]
 
 
-MIN_API_LEVEL = 7
+MIN_API_LEVEL = 8
 
 def render_template_with_tiapp(template_text, tiapp_obj):
 	t = Template(template_text)
@@ -206,6 +207,9 @@ class Builder(object):
 			self.tool_api_level = MIN_API_LEVEL
 		self.sdk = AndroidSDK(sdk, self.tool_api_level)
 		self.tiappxml = temp_tiapp
+
+		# TODO switch default to Rhino
+		self.runtime = self.tiappxml.app_properties.get('ti.android.runtime', 'v8')
 
 		self.set_java_commands()
 		# start in 1.4, you no longer need the build/android directory
@@ -580,8 +584,20 @@ class Builder(object):
 
 	def copy_project_resources(self):
 		info("Copying project resources..")
+
+		def validate_filenames(topdir):
+			for root, dirs, files in os.walk(topdir):
+				remove_ignored_dirs(dirs)
+				for d in dirs:
+					if d == "iphone":
+						dirs.remove(d)
+				for filename in files:
+					if filename.startswith("_"):
+						error("%s is an invalid filename. Android will not package assets whose filenames start with underscores. Fix and rebuild." % os.path.join(root, filename))
+						sys.exit(1)
 		
 		resources_dir = os.path.join(self.top_dir, 'Resources')
+		validate_filenames(resources_dir)
 		android_resources_dir = os.path.join(resources_dir, 'android')
 		self.project_deltafy = Deltafy(resources_dir, include_callback=self.include_path)
 		self.project_deltas = self.project_deltafy.scan()
@@ -647,7 +663,10 @@ class Builder(object):
 						relative_path = make_relative(delta.get_path(), resources_dir)
 					relative_path = relative_path.replace("\\", "/")
 					self.run_adb('push', delta.get_path(), "%s/%s" % (self.sdcard_resources, relative_path))
-		
+
+		if len(self.project_deltas) > 0:
+			requireIndex.generateJSON(self.assets_dir, os.path.join(self.assets_dir, "index.json"))
+
 	def generate_android_manifest(self,compiler):
 
 		self.generate_localizations()
@@ -1105,14 +1124,17 @@ class Builder(object):
 
 		if self.res_changed or manifest_changed:
 			res_dir = os.path.join(self.project_dir, 'res')
-			output = run.run([self.aapt, 'package', '-m', '-J', self.project_gen_dir, '-M', android_manifest, '-S', res_dir, '-I', self.android_jar],
-				warning_regex=r'skipping')
-		
+			output = run.run([self.aapt, 'package', '-m',
+				'-J', self.project_gen_dir,
+				'-M', android_manifest,
+				'-S', res_dir,
+				'-I', self.android_jar], warning_regex=r'skipping')
+
 		r_file = os.path.join(self.project_gen_dir, self.app_id.replace('.', os.sep), 'R.java')
 		if not os.path.exists(r_file) or (self.res_changed and output == None):
 			error("Error generating R.java from manifest")
 			sys.exit(1)
-		
+
 		return manifest_changed
 
 	def generate_stylesheet(self):
@@ -1245,10 +1267,10 @@ class Builder(object):
 			# kroll-apt.jar is needed for modules
 			classpath = os.pathsep.join([classpath, self.kroll_apt_jar])
 
-		if self.deploy_type != 'production':
-			classpath = os.pathsep.join([classpath,
-				os.path.join(self.support_dir, 'lib', 'titanium-verify.jar'),
-				os.path.join(self.support_dir, 'lib', 'titanium-debug.jar')])
+		#if self.deploy_type != 'production':
+		#	classpath = os.pathsep.join([classpath,
+		#		os.path.join(self.support_dir, 'lib', 'titanium-verify.jar'),
+		#		os.path.join(self.support_dir, 'lib', 'titanium-debug.jar')])
 
 		debug("Building Java Sources: " + " ".join(src_list))
 		javac_command = [self.javac, '-encoding', 'utf8',
@@ -1332,7 +1354,7 @@ class Builder(object):
 				if os.path.splitext(f)[1] != '.java':
 					absolute_path = os.path.join(root, f)
 					relative_path = os.path.join(root[len(self.project_src_dir)+1:], f)
-					if is_modified(absolute_path):
+					if is_modified(absolute_path) or not zip_contains(apk_zip, relative_path):
 						self.apk_updated = True
 						debug("resource file => " + relative_path)
 						apk_zip.write(os.path.join(root, f), relative_path, compression_type(f))
@@ -1358,10 +1380,11 @@ class Builder(object):
 					for file in os.listdir(libs_abi_dir):
 						if file.endswith('.so'):
 							native_lib = os.path.join(libs_abi_dir, file)
-							if is_modified(native_lib):
+							path_in_zip = '/'.join(['lib', abi_dir, file])
+							if is_modified(native_lib) or not zip_contains(apk_zip, path_in_zip):
 								self.apk_updated = True
 								debug("installing native lib: %s" % native_lib)
-								apk_zip.write(native_lib, '/'.join(['lib', abi_dir, file]))
+								apk_zip.write(native_lib, path_in_zip)
 
 		# add any native libraries : libs/**/*.so -> lib/**/*.so
 		add_native_libs(os.path.join(self.project_dir, 'libs'))
@@ -1369,6 +1392,19 @@ class Builder(object):
 		# add module native libraries
 		for module in self.modules:
 			add_native_libs(module.get_resource('libs'))
+
+		# add sdk runtime native libraries
+		sdk_native_libs = os.path.join(template_dir, 'native', 'libs', 'armeabi')
+		libkroll_v8_device = os.path.join(sdk_native_libs, 'libkroll-v8-device.so')
+		libkroll_v8_emulator = os.path.join(sdk_native_libs, 'libkroll-v8-emulator.so')
+
+		if self.runtime == "v8":
+			if self.deploy_type == "development":
+				apk_zip.write(libkroll_v8_emulator, 'lib/armeabi/libkroll-v8-emulator.so')
+				self.apk_updated = True
+			else:
+				apk_zip.write(libkroll_v8_device, 'lib/armeabi/libkroll-v8-device.so')
+				self.apk_updated = True
 
 		apk_zip.close()
 		return unsigned_apk
@@ -1381,7 +1417,6 @@ class Builder(object):
 
 	def package_and_deploy(self):
 		ap_ = os.path.join(self.project_dir, 'bin', 'app.ap_')
-		rhino_jar = os.path.join(self.support_dir, 'js.jar')
 
 		# This is only to check if this has been overridden in production
 		has_compile_js = self.tiappxml.has_app_property("ti.android.compilejs")
@@ -1393,7 +1428,9 @@ class Builder(object):
 			non_js_assets = os.path.join(self.project_dir, 'bin', 'non-js-assets')
 			if not os.path.exists(non_js_assets):
 				os.mkdir(non_js_assets)
-			copy_all(self.assets_dir, non_js_assets, ignore_exts=[".js"])
+			#TODO: Decide whether we need to add 'ignore_exts=[".js"]' back to the copy_all() method once we are able to package with rhino
+			# For now, we leave the js files in for v8 packaging
+			copy_all(self.assets_dir, non_js_assets)
 			pkg_assets_dir = non_js_assets
 
 		run.run([self.aapt, 'package', '-f', '-M', 'AndroidManifest.xml', '-A', pkg_assets_dir,
@@ -1747,7 +1784,8 @@ class Builder(object):
 					include_all_ti_modules = True
 			if self.tiapp_changed or (self.js_changed and not self.fastdev) or \
 					self.force_rebuild or self.deploy_type == "production" or \
-					(self.fastdev and (not self.app_installed or not built_all_modules)):
+					(self.fastdev and (not self.app_installed or not built_all_modules)) or \
+					(not self.fastdev and built_all_modules):
 				trace("Generating Java Classes")
 				self.android.create(os.path.abspath(os.path.join(self.top_dir,'..')),
 					True, project_dir = self.top_dir, include_all_ti_modules=include_all_ti_modules)
@@ -1765,7 +1803,7 @@ class Builder(object):
 			self.compiled_files = compiler.compiled_files
 			self.android_jars = compiler.jar_libraries
 			self.merge_internal_module_resources()
-			
+
 			if not os.path.exists(self.assets_dir):
 				os.makedirs(self.assets_dir)
 
@@ -1831,24 +1869,18 @@ class Builder(object):
 				dex_args += ['--dex', '--output='+self.classes_dex, self.classes_dir]
 				dex_args += self.android_jars
 				dex_args += self.module_jars
-				if self.deploy_type != 'production':
-					dex_args.append(os.path.join(self.support_dir, 'lib', 'titanium-verify.jar'))
-					dex_args.append(os.path.join(self.support_dir, 'lib', 'titanium-debug.jar'))
-					# the verifier depends on Ti.Network classes, so we may need to inject it
-					has_network_jar = False
-					for jar in self.android_jars:
-						if jar.endswith('titanium-network.jar'):
-							has_network_jar = True
-							break
-					if not has_network_jar:
-						dex_args.append(os.path.join(self.support_dir, 'modules', 'titanium-network.jar'))
+				#if self.deploy_type != 'production':
+				#	dex_args.append(os.path.join(self.support_dir, 'lib', 'titanium-verify.jar'))
+				#	dex_args.append(os.path.join(self.support_dir, 'lib', 'titanium-debug.jar'))
+				#	# the verifier depends on Ti.Network classes, so we may need to inject it
+				#	has_network_jar = False
+				#	for jar in self.android_jars:
+				#		if jar.endswith('titanium-network.jar'):
+				#			has_network_jar = True
+				#			break
+				#	if not has_network_jar:
+				#		dex_args.append(os.path.join(self.support_dir, 'modules', 'titanium-network.jar'))
 
-					# substitute for the debugging js jar in non production mode
-					for jar in self.android_jars:
-						if jar.endswith('js.jar'):
-							dex_args.remove(jar)
-							dex_args.append(os.path.join(self.support_dir, 'js-debug.jar'))
-	
 				info("Compiling Android Resources... This could take some time")
 				# TODO - Document Exit message
 				run_result = run.run(dex_args, warning_regex=r'warning: ')
